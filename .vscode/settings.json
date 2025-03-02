@@ -1,4 +1,7 @@
 {
-	"css.customData": [".vscode/css-custom-data.json"],
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "css.customData": [
+        ".vscode/css-custom-data.json"
+    ],
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "files.eol": "\n"
 }

@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+model Usuario {
+  id    String  @id @default(uuid())
+  correo String  @unique
+  nombre_completo String
+  roles UsuarioRol[]
+}
+
+model Rol {
+  id   String  @id @default(uuid())
+  nombre String  @unique
+  usuarios UsuarioRol[]
+}
+
+model UsuarioRol {
+  usuarioId String
+  rolId String
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  rol   Rol @relation(fields: [rolId], references: [id], onDelete: Cascade)
+
+  @@id([usuarioId, rolId])
+}
+
+model UsuarioRolConfig {
+    id   String  @id @default(uuid())
+    correo String  @unique
+    nombres_rol String
+}

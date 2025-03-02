@@ -11,7 +11,6 @@ type BigCalendarProps = {
 };
 
 const BigCalendar: React.FC<BigCalendarProps> = ({ value, onChange }) => {
-  const { locale } = useLocale();
   const [currentMonth, setCurrentMonth] = useState<CalendarDate | null>(null);
   const [selectedDate, setSelectedDate] = useState<CalendarDate | null>(null);
   const [monthName, setMonthName] = useState<string>("");
