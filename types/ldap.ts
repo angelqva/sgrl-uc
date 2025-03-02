@@ -7,8 +7,8 @@ export interface ILDAPAutenticarseResponse {
   };
   data?: {
     usuario: string;
-    displayName: string;
-    role: string;
-    mail: string;
+    nombreCompleto: string;
+    rol: string;
+    correo: string;
   };
 }

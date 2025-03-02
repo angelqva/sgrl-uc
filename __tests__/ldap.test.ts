@@ -2,7 +2,7 @@ import { LDAP_UC } from "@/lib/ldap";
 
 describe("LDAP Busqueda del DN de Usuario", () => {
   test("Prueba Busqueda exitosa del DN de usuario", async () => {
-    const usuario = await LDAP_UC.buscarDN("anapoles");
+    const usuario = await LDAP_UC.buscarDN("angel.napoles");
 
     console.log(usuario);
     expect(usuario?.length).toBeGreaterThan(0);
@@ -13,7 +13,10 @@ describe("LDAP Busqueda del DN de Usuario", () => {
     expect(usuario).toBeNull();
   });
   test("Prueba autenticación de usuario correcta", async () => {
-    const { errors, data } = await LDAP_UC.autenticarse("anapoles", "1q2w3e4r");
+    const { errors, data } = await LDAP_UC.autenticarse(
+      "angel.napoles",
+      "1q2w3e4r",
+    );
 
     console.log({ errors, data });
     expect(data).toBeDefined();

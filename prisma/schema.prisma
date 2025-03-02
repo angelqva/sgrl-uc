@@ -13,7 +13,7 @@ datasource db {
 model Usuario {
   id    String  @id @default(uuid())
   correo String  @unique
-  nombre_completo String
+  nombreCompleto String
   roles UsuarioRol[]
 }
 
@@ -35,5 +35,5 @@ model UsuarioRol {
 model UsuarioRolConfig {
     id   String  @id @default(uuid())
     correo String  @unique
-    nombres_rol String
+    roles String @default("Administrador,Responsable,Directivo,Logístico,Usuario")
 }

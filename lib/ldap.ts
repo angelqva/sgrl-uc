@@ -88,9 +88,9 @@ export class LDAP_UC {
         return {
           data: {
             usuario,
-            role: "Usuario",
-            mail: `${usuario}@reudc.edu.cu`,
-            displayName: cn,
+            rol: "Usuario",
+            correo: `${usuario}@reudc.edu.cu`,
+            nombreCompleto: cn,
           },
         };
       } else {
@@ -105,9 +105,9 @@ export class LDAP_UC {
         return {
           data: {
             usuario,
-            role,
-            mail: `${usuario}@reudc.edu.cu`,
-            displayName,
+            rol: role,
+            correo: `${usuario}@reudc.edu.cu`,
+            nombreCompleto: displayName,
           },
         };
       } else {

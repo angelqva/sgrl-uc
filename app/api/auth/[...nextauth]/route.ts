@@ -1,47 +1,93 @@
-// import NextAuth from "next-auth";
-// import CredentialsProvider from "next-auth/providers/credentials";
-// import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import NextAuth, { DefaultSession } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-// import prisma from "@/lib/prisma";
+import { LDAP_UC } from "@/lib/ldap";
+import { ServiceUserRoles } from "@/db/service.user-roles";
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      correo: string;
+      nombreCompleto: string;
+      roles: string;
+    } & DefaultSession["user"];
+  }
 
-// export const authOptions = {
-//   adapter: PrismaAdapter(prisma),
-//   providers: [
-//     CredentialsProvider({
-//       name: "LDAP",
-//       credentials: {
-//         correo: {
-//           label: "Correo",
-//           type: "email",
-//           placeholder: "correo@reduc.edu.cu",
-//         },
-//         contraseña: { label: "Contraseña", type: "password" },
-//       },
-//       async authorize(credentials) {
-//         if (!credentials?.correo || !credentials?.contraseña) {
-//           throw new Error("Debe proporcionar credenciales válidas");
-//         }
+  interface User {
+    id: string;
+    correo: string;
+    nombreCompleto: string;
+    roles: string;
+  }
+}
+export const authOptions = {
+  providers: [
+    CredentialsProvider({
+      name: "LDAP",
+      credentials: {
+        usuario: {
+          label: "Usuario",
+          type: "text",
+          placeholder: "Entre su Usuario",
+        },
+        contraseña: {
+          label: "Contraseña",
+          type: "password",
+          placeholder: "Entre su Contraseña",
+        },
+      },
+      async authorize(credentials) {
+        if (!credentials?.usuario || !credentials?.contraseña) {
+          throw new Error("Debe proporcionar credenciales válidas");
+        }
+        const { errors, data } = await LDAP_UC.autenticarse(
+          credentials.usuario,
+          credentials.contraseña,
+        );
 
-//         // Si no existe en Prisma, guardarlo
+        console.log({ errors, data });
+        if (errors) {
+          throw new Error("Debe proporcionar credenciales válidas");
+        }
 
-//         return user; // Devolver el usuario autenticado
-//       },
-//     }),
-//   ],
-//   callbacks: {
-//     async session({ session, user }) {
-//       if (session.user) {
-//         session.user.id = user.id;
-//         session.user.role = user.role; // 🚀 Agregar el rol del usuario a la sesión
-//       }
+        const dbResponse = await ServiceUserRoles.createUser({ ...data });
 
-//       return session;
-//     },
-//   },
-//   pages: {
-//     signIn: "/autenticarse",
-//   },
-// };
+        console.log({ dbResponse });
+        if (!dbResponse.data) {
+          throw new Error("Error en la base de datos");
+        }
 
-// export const handler = NextAuth(authOptions);
-// export { handler as GET, handler as POST };
+        return { ...dbResponse.data, roles: dbResponse.data.roles.join(",") };
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }: { token: any; user?: any }) {
+      if (user) {
+        token.id = user.id;
+        token.correo = user.correo;
+        token.nombreCompleto = user.nombreCompleto;
+        token.roles = user.roles;
+      }
+
+      return token;
+    },
+    async session({ session, token }: { session: any; token: any }) {
+      if (session.user) {
+        session.user.id = token.id;
+        session.user.correo = token.correo;
+        session.user.nombreCompleto = token.nombreCompleto;
+        session.user.roles = token.roles;
+      }
+
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/autenticarse",
+  },
+  debug: true,
+};
+
+export const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

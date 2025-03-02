@@ -3,5 +3,6 @@
         ".vscode/css-custom-data.json"
     ],
     "typescript.tsdk": "node_modules/typescript/lib",
-    "files.eol": "\n"
+    "files.eol": "\n",
+    "typos.config": ".typos.toml"
 }
