@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import { LDAP_UC } from "@/lib/ldap";
 import { ServiceUserRoles } from "@/db/service.user-roles";
+import { ResponseErrors } from "@/lib/errors";
 declare module "next-auth" {
   interface Session {
     user: {
@@ -38,23 +39,31 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.usuario || !credentials?.contraseña) {
-          throw new Error("Debe proporcionar credenciales válidas");
+          throw new Error(
+            JSON.stringify({
+              usuario: "Este campo es obligatorio",
+              contraseña: "Este campo es obligatorio",
+            }),
+          );
         }
         const { errors, data } = await LDAP_UC.autenticarse(
           credentials.usuario,
           credentials.contraseña,
         );
 
-        console.log({ errors, data });
         if (errors) {
-          throw new Error("Debe proporcionar credenciales válidas");
+          throw new Error(JSON.stringify(errors));
         }
 
         const dbResponse = await ServiceUserRoles.createUser({ ...data });
 
-        console.log({ dbResponse });
         if (!dbResponse.data) {
-          throw new Error("Error en la base de datos");
+          if (dbResponse.errores) {
+            throw new Error(JSON.stringify(dbResponse.errores));
+          }
+          throw new Error(
+            JSON.stringify({ unhandled: "Error de base de datos" }),
+          );
         }
 
         return { ...dbResponse.data, roles: dbResponse.data.roles.join(",") };

@@ -1,2 +1,2 @@
 [default]
-extend-ignore-words = ["Responsable", "contener", "hace"]
+extend-ignore-words = ["Responsable", "contener", "hace", "contener"]

@@ -2,8 +2,7 @@ export interface ILDAPAutenticarseResponse {
   errors?: {
     usuario?: string;
     contraseña?: string;
-    conexión?: string;
-    tipos?: string;
+    toast?: string;
   };
   data?: {
     usuario: string;

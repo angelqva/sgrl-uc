@@ -20,7 +20,7 @@ export class LDAP_UC {
           await client.unbind();
         }
       } catch (error) {
-        console.log("Unhandled Error", error);
+        console.log("❌ Unhandled Error", error);
       }
     };
 
@@ -30,7 +30,7 @@ export class LDAP_UC {
       console.log("❌  Error de conexión con LDAP:", error);
       await unbindClient();
 
-      return { errors: { conexión: "Error de conexión con LDAP" } };
+      return { errors: { toast: "Error de conexión con LDAP" } };
     }
     if (CONSTANTS.PRODUCTION === "0") {
       usuarioDN = await LDAP_UC.buscarDN(usuario);
@@ -58,7 +58,7 @@ export class LDAP_UC {
       console.log("❌ Error de credenciales.", error);
       await unbindClient();
 
-      return { errors: { conexión: "Error de credenciales." } };
+      return { errors: { contraseña: "Error de credenciales." } };
     }
     try {
       const { searchEntries } = await client.search(LDAP_UC.baseDN, {
@@ -73,13 +73,13 @@ export class LDAP_UC {
       console.log("❌  Error de conexión con LDAP:", error);
       await unbindClient();
 
-      return { errors: { conexión: "Error de conexión con LDAP." } };
+      return { errors: { toast: "Error de conexión con LDAP." } };
     }
     await unbindClient();
     if (entries.length === 0) {
       console.log("❌  Error de conexión con LDAP");
 
-      return { errors: { conexión: "Error de conexión con LDAP." } };
+      return { errors: { toast: "Error de conexión con LDAP." } };
     }
     if (usuarioDN) {
       const [{ cn }] = entries;
@@ -95,7 +95,7 @@ export class LDAP_UC {
         };
       } else {
         return {
-          errors: { tipos: `cn: ${cn}` },
+          errors: { toast: `Mostrar al administrador cn: ${cn}` },
         };
       }
     } else {
@@ -112,7 +112,9 @@ export class LDAP_UC {
         };
       } else {
         return {
-          errors: { tipos: `displayName: ${displayName}, role: ${role}` },
+          errors: {
+            toast: `Mostrar al administrador displayName: ${displayName}, role: ${role}`,
+          },
         };
       }
     }

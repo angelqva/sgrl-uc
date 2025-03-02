@@ -7,7 +7,6 @@ export class ServiceUserRoles {
     const validatedData = schemaValidardUsuario.safeParse(data);
 
     if (validatedData.success) {
-      console.log(validatedData);
       try {
         const newUser = await prisma.usuario.upsert({
           where: { correo: validatedData.data.correo },
@@ -15,7 +14,6 @@ export class ServiceUserRoles {
           create: validatedData.data,
         });
 
-        console.log({ newUser });
         const configUserRoles = await prisma.usuarioRolConfig.findUnique({
           where: {
             correo: newUser.correo,
@@ -26,7 +24,7 @@ export class ServiceUserRoles {
         if (roles.length === 0) {
           return {
             errores: {
-              seed: "Necesita rellenar los roles de la base de datos",
+              toast: "Necesita rellenar los roles de la base de datos",
             },
           };
         }
@@ -105,7 +103,7 @@ export class ServiceUserRoles {
 
         return {
           errores: {
-            db: "Error de conexión con la db",
+            toast: "Error de conexión con la db",
           },
         };
       } catch (error) {
@@ -113,7 +111,7 @@ export class ServiceUserRoles {
 
         return {
           errores: {
-            db: "Error de conexión con la db",
+            toast: "Error de conexión con la db",
           },
         };
       }
@@ -121,7 +119,7 @@ export class ServiceUserRoles {
 
     return {
       errores: {
-        ...validatedData.error.errors,
+        ...validatedData.error.formErrors.fieldErrors,
       },
     };
   }
