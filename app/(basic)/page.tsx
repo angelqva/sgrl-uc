@@ -15,7 +15,7 @@ export default function Home() {
         </span>
         <br className="hidden sm:block" />
         <span className={title()}>
-          locales para tus actividades en la universidad.
+          eventos en los locales de la universidad.
         </span>
         <div className={subtitle({ class: "mt-4" })}>
           ¡Planifica con confianza y optimiza tu tiempo!
@@ -25,7 +25,7 @@ export default function Home() {
       <div className="flex flex-col gap-5 sm:flex-row">
         <Link
           className={buttonStyles({
-            color: "primary",
+            color: "secondary",
             radius: "full",
             variant: "shadow",
           })}

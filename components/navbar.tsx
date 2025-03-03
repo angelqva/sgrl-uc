@@ -28,7 +28,7 @@ export const Navbar = () => {
           <Button
             as={Link}
             className="text-sm font-normal"
-            color="primary"
+            color="secondary"
             href="/autenticarse"
             startContent={<Fingerprint />}
             variant="bordered"
