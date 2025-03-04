@@ -15,7 +15,7 @@ export default function Home() {
         </span>
         <br className="hidden sm:block" />
         <span className={title()}>
-          eventos en los locales de la universidad.
+          actividades en los locales de la universidad.
         </span>
         <div className={subtitle({ class: "mt-4" })}>
           ¡Planifica con confianza y optimiza tu tiempo!
