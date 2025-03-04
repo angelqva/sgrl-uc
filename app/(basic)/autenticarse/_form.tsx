@@ -31,7 +31,7 @@ export default function FormLogin() {
         description: "Ha autenticado de forma satisfactoria",
         color: "success",
       });
-      router.push("/dashboard"); // Redirigir después del login exitoso
+      router.push("/panel"); // Redirigir después del login exitoso
     } else {
       if (res.error) {
         const responseErrors = JSON.parse(res.error) as Record<

@@ -28,7 +28,7 @@ export default function UserInfo({
                 color: "primary",
                 variant: "shadow",
               })}
-              href="/dashboard"
+              href="/panel"
             >
               <LayoutDashboard /> Panel de Trabajo
             </Link>

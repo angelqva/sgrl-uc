@@ -29,7 +29,7 @@ export default function Home() {
             radius: "full",
             variant: "shadow",
           })}
-          href="/dashboard"
+          href="/panel"
         >
           <LayoutDashboard /> Panel de Trabajo
         </Link>
