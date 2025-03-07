@@ -1,4 +1,8 @@
+import StoreProvider from "./provider";
+
+import Breadcrumb from "@/components/breadcrumb";
 import Sidebar from "@/components/sidebar";
+import SidebarRight from "@/components/sidebar-right";
 
 export default function DashboardLayout({
   children,
@@ -6,11 +10,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex flex-col h-screen">
-      <Sidebar />
-      <main className="container flex-grow px-6 pt-16 mx-auto max-w-7xl">
-        {children}
-      </main>
-    </div>
+    <StoreProvider>
+      <div className="relative flex flex-col h-screen">
+        <Sidebar />
+        <SidebarRight />
+        <main className="container flex-grow px-5 py-5 md:px-10 mx-auto max-w-[1440px]">
+          <Breadcrumb />
+          {children}
+        </main>
+      </div>
+    </StoreProvider>
   );
 }

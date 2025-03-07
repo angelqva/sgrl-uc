@@ -2,8 +2,8 @@ import NextAuth, { DefaultSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import { LDAP_UC } from "@/lib/ldap";
-import { ServiceUserRoles } from "@/db/service.user-roles";
-import { ResponseErrors } from "@/lib/errors";
+import { ServiceUserRoles } from "@/services/service.user-roles";
+
 declare module "next-auth" {
   interface Session {
     user: {

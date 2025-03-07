@@ -89,7 +89,7 @@ export class LDAP_UC {
           data: {
             usuario,
             rol: "Usuario",
-            correo: `${usuario}@reudc.edu.cu`,
+            correo: `${usuario}@reduc.edu.cu`,
             nombreCompleto: cn,
           },
         };
@@ -106,7 +106,7 @@ export class LDAP_UC {
           data: {
             usuario,
             rol: role,
-            correo: `${usuario}@reudc.edu.cu`,
+            correo: `${usuario}@reduc.edu.cu`,
             nombreCompleto: displayName,
           },
         };
