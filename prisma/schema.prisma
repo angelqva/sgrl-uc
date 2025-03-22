@@ -2,38 +2,46 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model Usuario {
-  id    String  @id @default(uuid())
-  correo String  @unique
-  nombreCompleto String
-  roles UsuarioRol[]
+    id             String       @id @default(uuid())
+    correo         String       @unique
+    nombreCompleto String
+    roles          UsuarioRol[]
 }
 
 model Rol {
-  id   String  @id @default(uuid())
-  nombre String  @unique
-  usuarios UsuarioRol[]
+    id       String       @id @default(uuid())
+    nombre   String       @unique
+    usuarios UsuarioRol[]
 }
 
 model UsuarioRol {
-  usuarioId String
-  rolId String
-  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-  rol   Rol @relation(fields: [rolId], references: [id], onDelete: Cascade)
+    usuarioId String
+    rolId     String
+    usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+    rol       Rol     @relation(fields: [rolId], references: [id], onDelete: Cascade)
 
-  @@id([usuarioId, rolId])
+    @@id([usuarioId, rolId])
 }
 
 model UsuarioRolConfig {
-    id   String  @id @default(uuid())
-    correo String  @unique
-    roles String @default("Administrador,Responsable,Directivo,Logístico,Usuario")
+    id     String @id @default(uuid())
+    correo String @unique
+    roles  String @default("Administrador,Responsable,Directivo,Logístico,Usuario")
+}
+
+model Area {
+    id          String @id @default(uuid())
+    nombre      String @unique
+    slug        String @unique
+    ubicacion   String @db.Text
+    descripcion String @db.Text
 }

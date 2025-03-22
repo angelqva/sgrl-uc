@@ -11,7 +11,7 @@ export default function Breadcrumb() {
   return (
     <nav
       aria-label="breadcrumb"
-      className="flex justify-center w-full pt-1 pb-6 text-gray-600"
+      className="flex justify-center w-full pt-1 pb-6 text-gray-600 md:justify-start"
     >
       <ul className="flex flex-wrap items-center justify-center gap-2 px-9 lg:px-0">
         <li>

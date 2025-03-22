@@ -11,6 +11,7 @@ type ActiveLinkProps = {
   className?: string;
   activeClassName?: string;
   exact?: boolean; // Optional prop for exact match
+  tabIndex?: number;
 };
 
 export default function ActiveLink({
@@ -19,6 +20,7 @@ export default function ActiveLink({
   className = "",
   activeClassName = "ring-2 ring-white",
   exact = false,
+  tabIndex,
 }: ActiveLinkProps) {
   const pathname = usePathname();
 
@@ -26,7 +28,11 @@ export default function ActiveLink({
   const isActive = exact ? pathname === href : pathname.startsWith(href);
 
   return (
-    <Link className={cn(className, isActive && activeClassName)} href={href}>
+    <Link
+      className={cn(className, isActive && activeClassName)}
+      href={href}
+      tabIndex={tabIndex}
+    >
       {children}
     </Link>
   );
