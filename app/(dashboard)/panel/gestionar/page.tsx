@@ -1,17 +1,54 @@
+import { Icon } from "@iconify/react";
+
+import BtnLink from "@/components/btn-link";
+import Headings from "@/components/headings";
+import CardLinks from "@/components/card-links";
+
 export default function PageGestionar() {
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold">
-        Gestión de Espacios en la Universidad
-      </h1>
-      <p>
-        Administra las áreas de la universidad y los locales disponibles para
-        reservaciones.
-      </p>
-      <p>
-        Aquí puedes agregar, editar o eliminar áreas y locales según las
-        necesidades del sistema.s
-      </p>
-    </div>
+    <>
+      <Headings
+        action={
+          <BtnLink
+            href="/panel"
+            icon={
+              <Icon
+                className="w-12 h-12 text-white"
+                icon="solar:widget-5-bold-duotone"
+              />
+            }
+          >
+            Panel Administrativo
+          </BtnLink>
+        }
+      >
+        <h1 className="text-3xl font-bold mb-2 text-secondary-800">
+          Gestión del Sistema de Reservaciones
+        </h1>
+        <p className="text-lg">
+          Administra las áreas de la universidad, locales y otras
+          configuraciones necesarias.
+        </p>
+      </Headings>
+      <CardLinks
+        items={[
+          {
+            nombre: "Áreas",
+            href: "/panel/gestionar/areas",
+            icon: "solar:streets-map-point-bold-duotone",
+          },
+          {
+            nombre: "Locales",
+            href: "/panel/gestionar/locales",
+            icon: "solar:map-bold",
+          },
+          {
+            nombre: "Actividades Categorias",
+            href: "/panel/gestionar/actividades-categorias",
+            icon: "solar:bookmark-square-bold",
+          },
+        ]}
+      />
+    </>
   );
 }

@@ -36,7 +36,6 @@ export class ServiceUserRoles {
               rolId: roles.find((rolEl) => rolEl.nombre === el)?.id ?? "",
             }))
             .filter((el) => el.rolId.length > 0);
-          console.log(setUserRoles);
         } else {
           const rolUser = roles.find((el) => el.nombre === "Usuario");
 

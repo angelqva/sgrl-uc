@@ -14,7 +14,7 @@ export default function DashboardLayout({
       <div className="relative flex flex-col h-screen">
         <Sidebar />
         <SidebarRight />
-        <main className="container flex-grow px-5 py-5 md:px-10 mx-auto max-w-[1440px]">
+        <main className="container flex-grow px-5 py-5 md:px-12 mx-auto max-w-[1440px]">
           <Breadcrumb />
           {children}
         </main>

@@ -127,7 +127,7 @@ export class LDAP_UC {
       client = new Client({ url: LDAP_UC.url });
       const { searchEntries } = await client.search(LDAP_UC.baseDN, {
         scope: "sub",
-        filter: `(uid=*${usuario}*)`, // Asegúrate de que el atributo "uid" es el correcto en tu LDAP
+        filter: `(uid=${usuario})`, // Asegúrate de que el atributo "uid" es el correcto en tu LDAP
         timeLimit: 6000,
         attributes: ["dn"],
       });
@@ -139,7 +139,7 @@ export class LDAP_UC {
 
       return dn;
     } catch (err: any) {
-      console.error("❌ Authentication failed:", err.message);
+      console.error("❌ Search Ldap failed:", err.message);
     } finally {
       if (client) {
         await client.unbind();

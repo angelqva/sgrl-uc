@@ -13,10 +13,10 @@ export default function Breadcrumb() {
       aria-label="breadcrumb"
       className="flex justify-center w-full pt-1 pb-6 text-gray-600 md:justify-start"
     >
-      <ul className="flex flex-wrap items-center justify-center gap-2 px-9 lg:px-0">
+      <ul className="flex flex-wrap items-center justify-center gap-2 px-9 md:px-0">
         <li>
           <Link
-            className="flex flex-row items-center gap-2 text-primary-500 hover:underline"
+            className="flex flex-row items-center gap-2 text-secondary-800 font-semibold hover:underline"
             href="/"
           >
             <Icon className="w-6 h-6" icon="solar:calendar-outline" />
@@ -36,7 +36,7 @@ export default function Breadcrumb() {
                 </span>
               ) : (
                 <Link
-                  className="capitalize text-primary-500 hover:underline"
+                  className="capitalize text-secondary-800 font-semibold hover:underline"
                   href={href}
                 >
                   {decodeURIComponent(segment)}
