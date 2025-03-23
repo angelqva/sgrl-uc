@@ -15,19 +15,17 @@ export default function Sidebar() {
     if (!isOpen) return;
 
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (
-        refAside.current &&
-        !refAside.current.contains(event.target as Node)
-      ) {
-        toggleSidebar();
+      if (refAside.current && refAside.current.contains(event.target as Node)) {
+        return;
       }
+      toggleSidebar();
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
     document.addEventListener("touchstart", handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [isOpen, toggleSidebar]);
