@@ -11,6 +11,9 @@
         "seed": "ts-node prisma/seed.ts",
         "client": "npx prisma studio"
     },
+    "prisma":{
+        "seed": "ts-node prisma/seed.ts"
+    },
     "dependencies": {
         "@heroui/button": "2.2.13",
         "@heroui/code": "2.2.10",
@@ -51,7 +54,7 @@
         "@next/eslint-plugin-next": "15.0.4",
         "@react-types/shared": "3.25.0",
         "@types/jest": "^29.5.14",
-        "@types/node": "20.5.7",
+        "@types/node": "^20.5.7",
         "@types/react": "18.3.3",
         "@types/react-dom": "18.3.0",
         "@typescript-eslint/eslint-plugin": "8.11.0",
@@ -75,6 +78,6 @@
         "tailwindcss": "3.4.16",
         "ts-jest": "^29.2.6",
         "ts-node": "^10.9.2",
-        "typescript": "^5.6.3"
+        "typescript": "^5.8.2"
     }
 }

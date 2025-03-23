@@ -12,7 +12,7 @@ async function main() {
   const user_roles = [
     {
       correo: "angel.napoles@reduc.edu.cu",
-      nombres_rol: "Administrador,Usuario",
+      roles: "Administrador,Usuario",
     },
   ];
 
