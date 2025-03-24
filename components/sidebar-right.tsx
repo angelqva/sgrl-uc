@@ -64,7 +64,9 @@ export default function SidebarRight() {
               : "rounded-tr-none rounded-br-none",
           )}
           color="secondary"
-          onPress={toggleSidebar}
+          onPress={() => {
+            setTimeout(toggleSidebar, 50);
+          }}
         >
           <Icon
             className="w-8 h-8"

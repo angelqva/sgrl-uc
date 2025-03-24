@@ -25,7 +25,7 @@ export default function CardLinks({
             key={`card-link-${nombre}`}
             className="bg-secondary-500/10 w-full md:max-w-xs"
           >
-            <CardHeader className="justify-between">
+            <CardHeader className="justify-between min-h-20">
               <div className="flex items-center">
                 <Icon
                   className="w-12 h-12 min-w-12 text-secondary-600"

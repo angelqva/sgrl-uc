@@ -15,10 +15,12 @@ export default function Sidebar() {
     if (!isOpen) return;
 
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (refAside.current && refAside.current.contains(event.target as Node)) {
-        return;
+      if (
+        refAside.current &&
+        !refAside.current.contains(event.target as Node)
+      ) {
+        toggleSidebar();
       }
-      toggleSidebar();
     };
 
     document.addEventListener("click", handleClickOutside);
@@ -53,7 +55,9 @@ export default function Sidebar() {
               : "rounded-tl-none rounded-bl-none",
           )}
           color="secondary"
-          onPress={toggleSidebar}
+          onPress={() => {
+            setTimeout(toggleSidebar, 50);
+          }}
         >
           <Icon
             className="w-8 h-8"

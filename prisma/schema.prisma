@@ -39,9 +39,10 @@ model UsuarioRolConfig {
 }
 
 model Area {
-    id          String @id @default(uuid())
-    nombre      String @unique
-    slug        String @unique
-    ubicacion   String @db.Text
-    descripcion String @db.Text
+    id          String  @id @default(uuid())
+    nombre      String  @unique
+    slug        String  @unique
+    codigo      String  @unique
+    ubicacion   String? @db.Text
+    descripcion String? @db.Text
 }
