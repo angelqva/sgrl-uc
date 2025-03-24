@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 
-import ListArea from "./_list-area";
+import ListArea from "./_components/list-area";
 
 import BtnLink from "@/components/btn-link";
 import Headings from "@/components/headings";
@@ -18,7 +18,7 @@ export default async function PageGestionarAreas() {
             icon={
               <Icon
                 className="w-12 h-12 text-white"
-                icon="solar:widget-add-bold-duotone"
+                icon="solar:multiple-forward-left-bold"
               />
             }
           >

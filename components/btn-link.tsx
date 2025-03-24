@@ -18,7 +18,9 @@ export default function BtnLink({
   return (
     <Button
       as={Link}
-      className={cn(className ?? "px-6 py-8 font-semibold text-lg")}
+      className={cn(
+        className ?? "w-full md:w-fit px-6 py-8 font-semibold text-lg",
+      )}
       color="secondary"
       href={href}
       startContent={icon}

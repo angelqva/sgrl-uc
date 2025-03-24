@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 
-import FormLogin from "./_form";
-import UserInfo from "./_user-info";
+import FormLogin from "./_components/form";
+import UserInfo from "./_components/user-info";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 

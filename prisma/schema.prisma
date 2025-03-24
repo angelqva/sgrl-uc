@@ -15,12 +15,17 @@ model Usuario {
     correo         String       @unique
     nombreCompleto String
     roles          UsuarioRol[]
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt @default(now())
 }
 
 model Rol {
     id       String       @id @default(uuid())
     nombre   String       @unique
     usuarios UsuarioRol[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @default(now())
 }
 
 model UsuarioRol {
@@ -29,6 +34,9 @@ model UsuarioRol {
     usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
     rol       Rol     @relation(fields: [rolId], references: [id], onDelete: Cascade)
 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @default(now())
+
     @@id([usuarioId, rolId])
 }
 
@@ -36,6 +44,9 @@ model UsuarioRolConfig {
     id     String @id @default(uuid())
     correo String @unique
     roles  String @default("Administrador,Responsable,Directivo,Logístico,Usuario")
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @default(now())
 }
 
 model Area {
@@ -45,4 +56,7 @@ model Area {
     codigo      String  @unique
     ubicacion   String? @db.Text
     descripcion String? @db.Text
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @default(now())
 }

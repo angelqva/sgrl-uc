@@ -23,7 +23,7 @@ export default function CardLinks({
         {items.map(({ nombre, href, icon, btnLabel }) => (
           <Card
             key={`card-link-${nombre}`}
-            className="bg-secondary-500/10 w-full md:max-w-xs"
+            className="bg-secondary-200/15 w-full md:max-w-xs hover:shadow-lg"
           >
             <CardHeader className="justify-between min-h-20">
               <div className="flex items-center">
@@ -42,7 +42,7 @@ export default function CardLinks({
             </CardHeader>
             <CardBody>
               <BtnLink
-                className="w-full text-lg"
+                className="w-full text-lg font-semibold"
                 href={href}
                 icon={
                   <Icon

@@ -14,7 +14,7 @@ export default function PageGestionar() {
             icon={
               <Icon
                 className="w-12 h-12 text-white"
-                icon="solar:widget-5-bold-duotone"
+                icon="solar:multiple-forward-left-bold"
               />
             }
           >
