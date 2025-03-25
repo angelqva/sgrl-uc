@@ -16,7 +16,7 @@ model Usuario {
     nombreCompleto String
     roles          UsuarioRol[]
     createdAt      DateTime     @default(now())
-    updatedAt      DateTime     @updatedAt @default(now())
+    updatedAt      DateTime     @default(now()) @updatedAt
 }
 
 model Rol {
@@ -25,7 +25,7 @@ model Rol {
     usuarios UsuarioRol[]
 
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 }
 
 model UsuarioRol {
@@ -35,7 +35,7 @@ model UsuarioRol {
     rol       Rol     @relation(fields: [rolId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
     @@id([usuarioId, rolId])
 }
@@ -46,7 +46,7 @@ model UsuarioRolConfig {
     roles  String @default("Administrador,Responsable,Directivo,Logístico,Usuario")
 
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Area {
@@ -57,6 +57,6 @@ model Area {
     ubicacion   String? @db.Text
     descripcion String? @db.Text
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt @default(now())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @default(now()) @updatedAt
 }

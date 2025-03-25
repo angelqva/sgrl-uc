@@ -69,11 +69,14 @@ export default function FormLogin() {
       <Card className="w-full max-w-md mx-auto">
         <CardBody className="p-6">
           <div className="flex flex-col items-center pb-6">
-            <Icon height="60" icon="solar:shield-keyhole-bold" width="60" />
-            <p className="text-2xl font-medium">Autenticarse</p>
-            <p className="text-small text-default-500">
-              Introduce los datos para continuar
+            <Icon
+              className="w-16 h-16 text-secondary-600"
+              icon="solar:shield-keyhole-bold"
+            />
+            <p className="text-2xl font-semibold text-secondary-800">
+              Autenticarse
             </p>
+            <p>Introduce los datos para continuar</p>
           </div>
           <Form
             className="flex flex-col gap-3"
@@ -157,10 +160,18 @@ export default function FormLogin() {
             />
 
             <Button
-              className="w-full"
-              color="primary"
+              className="w-full font-semibold"
+              color="secondary"
               isLoading={isSending}
               size="lg"
+              startContent={
+                !isSending && (
+                  <Icon
+                    className="w-7 h-7"
+                    icon="solar:shield-keyhole-broken"
+                  />
+                )
+              }
               type="submit"
             >
               Autenticarse

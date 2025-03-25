@@ -16,16 +16,25 @@ export default function UserInfo({
       <Card className="w-full max-w-md mx-auto">
         <CardBody className="p-6">
           <div className="flex flex-col items-center pb-6">
-            <Icon height="60" icon="solar:shield-user-bold" width="60" />
-            <p className="mb-4 text-2xl font-medium">¡Bienvenido!</p>
-            <p className="mb-2 text-xl font-medium">{user.nombreCompleto}</p>
-            <p className="mb-4 font-semibold text-primary-500">{user.correo}</p>
+            <Icon
+              className="w-16 h-16 text-secondary-600"
+              icon="solar:shield-user-bold"
+            />
+            <p className="mb-4 text-2xl font-bold text-secondary-800">
+              ¡Bienvenido!
+            </p>
+            <p className="mb-2 text-xl font-medium text-secondary-800">
+              {user.nombreCompleto}
+            </p>
+            <p className="mb-4 font-semibold text-secondary-600">
+              {user.correo}
+            </p>
             <p className="px-4 mb-4 text-center">
               Por favor siga el enlace a continuación para acceder al sistema
             </p>
             <Link
               className={buttonStyles({
-                color: "primary",
+                color: "secondary",
                 variant: "shadow",
               })}
               href="/panel"
@@ -35,7 +44,7 @@ export default function UserInfo({
             <p className="px-4 my-4 text-center">
               Si desea salir presione el enlace a continuación
             </p>
-            <LogoutButton color="primary" variant="bordered">
+            <LogoutButton color="secondary" variant="bordered">
               Salir del Sistema
             </LogoutButton>
           </div>

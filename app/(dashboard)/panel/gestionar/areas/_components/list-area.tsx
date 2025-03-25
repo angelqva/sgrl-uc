@@ -30,7 +30,7 @@ export default function ListArea({ areas }: Props) {
   }, [filter, areas]);
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-10">
       <div className="flex flex-col sm:flex-row gap-5 items-center">
         <BtnLink
           className="w-full sm:w-fit text-lg font-semibold py-6 px-4"
