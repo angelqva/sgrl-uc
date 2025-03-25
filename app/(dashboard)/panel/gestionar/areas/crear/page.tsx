@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 
-import FormCrearArea from "./_components/form";
+import FormArea from "./_components/form";
 
 import BtnLink from "@/components/btn-link";
 import Headings from "@/components/headings";
@@ -33,7 +33,7 @@ export default function PageAreasCrear() {
         </p>
       </Headings>
       <section className="mt-10">
-        <FormCrearArea />
+        <FormArea />
       </section>
     </>
   );

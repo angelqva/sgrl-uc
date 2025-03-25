@@ -15,52 +15,23 @@ export function slugify(text: string): string {
     .replace(/-+/g, "-") // múltiples guiones a uno solo
     .replace(/^-+|-+$/g, ""); // elimina guiones al principio y al final
 }
+export const handleErrors = (error: any) => {
+  if (error instanceof Error) {
+    try {
+      const parsedErrors = JSON.parse(error.message) as Record<
+        string,
+        string | string[]
+      >;
 
-export const validateString = (key: string, value: string) => {
-  const fieldErrors = {} as Record<string, string[]>;
+      if (!parsedErrors.toast) {
+        parsedErrors["toast"] = "Verifique los campos con error";
+      }
 
-  fieldErrors[key] = [] as string[];
-
-  if (!value || value.length === 0) {
-    fieldErrors[key].push("El campo es obligatorio");
+      return parsedErrors;
+    } catch (err) {
+      return {
+        toast: `Muestre este error al administrador: ${error.message}`,
+      } as Record<string, string | string[]>;
+    }
   }
-  if (value.length < 3) {
-    fieldErrors[key].push("El campo debe tener al menos 3 caracteres");
-  }
-
-  if (fieldErrors[key].length) {
-    return fieldErrors;
-  }
-
-  return {} as Record<string, string[]>;
-};
-export const validateStringOpcional = (key: string, value: string) => {
-  const fieldErrors = {} as Record<string, string[]>;
-
-  fieldErrors[key] = [] as string[];
-
-  if (value.length > 0 && value.length < 3) {
-    fieldErrors[key].push("El campo debe tener al menos 3 caracteres");
-  }
-
-  if (fieldErrors[key].length) {
-    return fieldErrors;
-  }
-
-  return {} as Record<string, string[]>;
-};
-export const validateStringRequired = (key: string, value: string) => {
-  const fieldErrors = {} as Record<string, string[]>;
-
-  fieldErrors[key] = [] as string[];
-
-  if (!value || value.length === 0) {
-    fieldErrors[key].push("El campo es obligatorio");
-  }
-
-  if (fieldErrors[key].length) {
-    return fieldErrors;
-  }
-
-  return {} as Record<string, string[]>;
 };

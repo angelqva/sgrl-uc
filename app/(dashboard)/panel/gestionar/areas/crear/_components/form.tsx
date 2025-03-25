@@ -1,6 +1,12 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import {
+  ChangeEvent,
+  useActionState,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import {
   Button,
   Input,
@@ -10,107 +16,51 @@ import {
   Select,
   SelectItem,
   Textarea,
+  addToast,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
+import { ZodObject } from "zod";
+import { Area } from "@prisma/client";
+
+import { saveArea } from "../action/save-area";
 
 import {
-  validateString,
-  validateStringOpcional,
-  validateStringRequired,
-} from "@/lib/utils";
+  areaCodigoSchema,
+  areaDescripcionSchema,
+  areaNombreSchema,
+  areaUbicacionSchema,
+} from "@/schema/area";
 
-export default function FormCrearArea() {
-  const [isSending, setIsSending] = useState(false);
-  const [ubicacion, setUbicacion] = useState("");
-  const [descripcion, setDescripcion] = useState("");
+export default function FormArea({ area }: { area?: Area }) {
+  const [pending, startTransaction] = useTransition();
+  const [state, formAction] = useActionState(saveArea, { slug: area?.slug });
+  const [codigo, setCodigo] = useState(area?.codigo ?? "");
+  const [nombre, setNombre] = useState(area?.nombre ?? "");
+  const [ubicacion, setUbicacion] = useState(area?.ubicacion ?? "");
+  const [descripcion, setDescripcion] = useState(area?.descripcion ?? "");
   const [errors, setErrors] = useState<Record<string, string | string[]>>({});
   const router = useRouter();
+  const validateField = ({
+    key,
+    schema,
+    data,
+  }: {
+    key: string;
+    schema: ZodObject<any>;
+    data: Record<string, unknown>;
+  }) => {
+    const { [key]: _, ...restErrors } = errors;
+    const parsed = schema.safeParse(data);
+    let fieldErrors = {};
 
-  const handleUbicacionChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setUbicacion(event.target.value);
-    changeSetErrors(
-      "ubicacion",
-      validateStringRequired("ubicacion", event.target.value),
-    );
-  };
-  const handleDescriptionChange = (value: string) => {
-    setDescripcion(value);
-    changeSetErrors(
-      "descripcion",
-      validateStringOpcional("descripcion", value),
-    );
-  };
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsSending(true);
-    const data = Object.fromEntries(new FormData(event.currentTarget));
-    const nameErrors = validateString("nombre", data["nombre"] as string);
-    const codigoErrors = validateString("codigo", data["codigo"] as string);
-    const ubicacionErrors = validateStringRequired("ubicacion", ubicacion);
-    const descripcionErrors = validateStringOpcional(
-      "descripcion",
-      descripcion,
-    );
-    const newErrors = {
-      ...nameErrors,
-      ...codigoErrors,
-      ...ubicacionErrors,
-      ...descripcionErrors,
-    };
-
-    setErrors(newErrors);
-    console.log(data);
-    console.log({ ubicacion });
-    if (Object.keys(newErrors).length === 0) {
-      await new Promise<void>((res) => setTimeout(res, 1000));
+    if (!parsed.success) {
+      fieldErrors = parsed.error.formErrors.fieldErrors;
     }
-    setIsSending(false);
-    // const res = await signIn("credentials", {
-    //   usuario: (data.usuario as string) ?? "",
-    //   contraseña: (data.contraseña as string) ?? "",
-    //   redirect: false,
-    // });
-
-    // setIsSending(false);
-    // if (!res?.error) {
-    //   addToast({
-    //     title: "Notificación de Éxito",
-    //     description: "Ha autenticado de forma satisfactoria",
-    //     color: "success",
-    //   });
-    //   router.push("/panel"); // Redirigir después del login exitoso
-    // } else {
-    //   if (res.error) {
-    //     const responseErrors = JSON.parse(res.error) as Record<
-    //       string,
-    //       string[] | string
-    //     >;
-
-    //     if (responseErrors.usuario || responseErrors.contraseña) {
-    //       // setErrors({
-    //       //   usuario: responseErrors.usuario,
-    //       //   contraseña: responseErrors.contraseña,
-    //       // });
-    //       addToast({
-    //         title: "Notificación de Error",
-    //         description: "Verifique los campos con error",
-    //         color: "danger",
-    //       });
-    //     }
-    //     if (responseErrors.toast) {
-    //       addToast({
-    //         title: "Notificación de Error",
-    //         description:
-    //           typeof responseErrors.toast === "string"
-    //             ? responseErrors.toast
-    //             : responseErrors.toast.join(", "),
-    //         color: "danger",
-    //       });
-    //     }
-    //   }
-    // }
+    setErrors({
+      ...restErrors,
+      ...(fieldErrors as Record<string, string | string[]>),
+    });
   };
   const displayErrors = (key: string) => {
     const fieldError = errors[key];
@@ -133,19 +83,89 @@ export default function FormCrearArea() {
 
     return "";
   };
-  const changeSetErrors = (
-    key: string,
-    fieldErrors: Record<string, string[]>,
-  ) => {
-    const { [key]: _, ...restErrors } = errors;
-
-    if (fieldErrors[key]?.length) {
-      restErrors[key] = fieldErrors[key];
-    }
-    setErrors({
-      ...restErrors,
+  const handleUbicacionChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setUbicacion(event.target.value);
+    validateField({
+      key: "ubicacion",
+      schema: areaUbicacionSchema,
+      data: { ubicacion: event.target.value },
     });
   };
+  const handleDescriptionChange = (value: string) => {
+    setDescripcion(value);
+    validateField({
+      key: "descripcion",
+      schema: areaDescripcionSchema,
+      data: { descripcion: value },
+    });
+  };
+  const handleNombreChange = (value: string) => {
+    setNombre(value);
+    validateField({
+      key: "nombre",
+      schema: areaNombreSchema,
+      data: { nombre: value },
+    });
+  };
+  const handleCodigoChange = (value: string) => {
+    setCodigo(value);
+    validateField({
+      key: "codigo",
+      schema: areaCodigoSchema,
+      data: { codigo: value },
+    });
+  };
+  const handleActionFormData = () => {
+    const formData = new FormData();
+
+    console.log({ codigo, nombre, ubicacion, descripcion });
+    Object.entries({ codigo, nombre, ubicacion, descripcion }).forEach(
+      ([key, value]) => {
+        formData.append(key, value);
+      },
+    );
+
+    return startTransaction(() => formAction(formData));
+  };
+
+  useEffect(() => {
+    console.log(state);
+    if (state.type) {
+      if (state.fields) {
+        setCodigo(state.fields["codigo"]);
+        setNombre(state.fields["nombre"]);
+        setUbicacion(state.fields["ubicacion"]);
+        setDescripcion(state.fields["descripcion"]);
+      }
+      if (state.errors) {
+        setErrors(state.errors);
+        if (state.errors.toast) {
+          addToast({
+            title: "Notificación de error",
+            description: state.errors.toast as string,
+            color: "danger",
+          });
+        }
+      }
+      if (state.type === "success") {
+        if (state.slug) {
+          addToast({
+            title: "Notificación de Éxito",
+            description: "Actualizado Satisfactoriamente",
+            color: "success",
+          });
+          router.push(`/panel/gestionar/areas/${state.slug}`);
+        } else {
+          addToast({
+            title: "Notificación de Éxito",
+            description: "Creado Satisfactoriamente",
+            color: "success",
+          });
+          router.push(`/panel/gestionar/areas`);
+        }
+      }
+    }
+  }, [state]);
 
   return (
     <div className="flex items-center justify-center w-full h-full">
@@ -162,10 +182,10 @@ export default function FormCrearArea() {
             <p>Complete los siguientes campos</p>
           </div>
           <Form
+            action={handleActionFormData}
             className="flex flex-col gap-3"
             validationBehavior="aria"
             validationErrors={errors}
-            onSubmit={handleSubmit}
           >
             <Input
               isRequired
@@ -176,10 +196,9 @@ export default function FormCrearArea() {
               name="codigo"
               placeholder="Complete este campo"
               type="text"
+              value={codigo}
               variant="bordered"
-              onValueChange={(value) => {
-                changeSetErrors("codigo", validateString("codigo", value));
-              }}
+              onValueChange={handleCodigoChange}
             />
             <Input
               isRequired
@@ -190,10 +209,9 @@ export default function FormCrearArea() {
               name="nombre"
               placeholder="Complete este campo"
               type="text"
+              value={nombre}
               variant="bordered"
-              onValueChange={(value) => {
-                changeSetErrors("nombre", validateString("nombre", value));
-              }}
+              onValueChange={handleNombreChange}
             />
             <Select
               isRequired
@@ -228,10 +246,10 @@ export default function FormCrearArea() {
             <Button
               className="w-full font-semibold"
               color="secondary"
-              isLoading={isSending}
+              isLoading={pending}
               size="lg"
               startContent={
-                !isSending && (
+                !pending && (
                   <Icon className="w-7 h-7" icon="solar:database-broken" />
                 )
               }

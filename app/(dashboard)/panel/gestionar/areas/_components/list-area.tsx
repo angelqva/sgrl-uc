@@ -71,7 +71,7 @@ export default function ListArea({ areas }: Props) {
               key={area.id}
               className="w-full md:max-w-xs hover:shadow-lg bg-secondary-200/15"
             >
-              <CardHeader className="flex justify-between">
+              <CardHeader className="flex justify-between min-h-20">
                 <div className="flex items-center">
                   <Icon
                     className="w-12 h-12 min-w-12 text-secondary-600"
@@ -81,7 +81,7 @@ export default function ListArea({ areas }: Props) {
                     {area.nombre}
                   </h3>
                 </div>
-                <p className="text-secondary-800 flex items-center text-sm">
+                <p className="text-secondary-800 flex items-center text-sm flex-shrink-0">
                   <Icon
                     className="w-4 h-4 min-w-4"
                     icon="solar:hashtag-bold-duotone"
