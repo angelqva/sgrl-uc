@@ -57,7 +57,8 @@ export class ServiceArea {
     }
   }
 
-  static async update(slug: string, data: FormData) {
+  static async update(slug: string, formData: FormData) {
+    const data = Object.fromEntries(formData.entries());
     const parsed = areaSchema.safeParse(data);
 
     if (parsed.success) {
@@ -74,7 +75,7 @@ export class ServiceArea {
       if (!existeSlug) {
         throw new Error(
           JSON.stringify({
-            toast: "Este Elemento no existe! Actualiza la página",
+            toast: "Este Elemento no existe en el sistema",
           }),
         );
       }
@@ -91,14 +92,8 @@ export class ServiceArea {
       }
     } else {
       const fieldErrors = { ...parsed.error.formErrors.fieldErrors };
-      const joinedErrors = Object.fromEntries(
-        Object.entries(fieldErrors).map(([key, messages]) => [
-          key,
-          (messages ?? []).join(", "),
-        ]),
-      );
 
-      throw new Error(JSON.stringify(joinedErrors));
+      throw new Error(JSON.stringify(fieldErrors));
     }
   }
 
