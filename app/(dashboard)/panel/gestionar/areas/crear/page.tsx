@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 
-import FormArea from "./_components/form";
+import FormArea from "../_components/form";
 
 import BtnLink from "@/components/btn-link";
 import Headings from "@/components/headings";

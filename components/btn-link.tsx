@@ -9,11 +9,19 @@ export default function BtnLink({
   className,
   href,
   icon,
+  color,
 }: {
   children: ReactNode;
   href: string;
   className?: string;
   icon?: ReactNode;
+  color?:
+    | "secondary"
+    | "default"
+    | "primary"
+    | "success"
+    | "warning"
+    | "danger";
 }) {
   return (
     <Button
@@ -21,7 +29,7 @@ export default function BtnLink({
       className={cn(
         className ?? "w-full md:w-fit px-6 py-8 font-semibold text-lg",
       )}
-      color="secondary"
+      color={color ?? "secondary"}
       href={href}
       startContent={icon}
     >

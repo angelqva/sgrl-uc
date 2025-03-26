@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { ZodObject } from "zod";
 import { Area } from "@prisma/client";
 
-import { saveArea } from "../action/save-area";
+import { saveArea } from "../_action/action.area";
 
 import {
   areaCodigoSchema,
@@ -154,7 +154,7 @@ export default function FormArea({ area }: { area?: Area }) {
             description: "Actualizado Satisfactoriamente",
             color: "success",
           });
-          router.push(`/panel/gestionar/areas/${state.slug}`);
+          router.push(`/panel/gestionar/areas/${state.area?.slug}`);
         } else {
           addToast({
             title: "Notificación de Éxito",

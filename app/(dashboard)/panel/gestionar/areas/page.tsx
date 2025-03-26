@@ -1,16 +1,22 @@
 import { Icon } from "@iconify/react";
+import { cookies } from "next/headers";
 
 import ListArea from "./_components/list-area";
 
 import BtnLink from "@/components/btn-link";
 import Headings from "@/components/headings";
 import { ServiceArea } from "@/services/service.area";
+import FeedBack from "@/components/feedback";
 
 export default async function PageGestionarAreas() {
   const areas = await ServiceArea.list();
+  const cookieStore = await cookies();
+  const feedback = cookieStore.get("feedback");
 
   return (
     <>
+      {feedback && <FeedBack feedback={feedback.value} />}
+
       <Headings
         action={
           <BtnLink

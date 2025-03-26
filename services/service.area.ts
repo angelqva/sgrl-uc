@@ -1,4 +1,4 @@
-import { Area } from "@prisma/client";
+import { Area, Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/utils";
@@ -20,35 +20,56 @@ export class ServiceArea {
     const parsed = areaSchema.safeParse(data);
 
     if (parsed.success) {
-      let existsByNombre;
-      let existsByCodigo;
-
-      try {
-        existsByNombre = await prisma.area.findUnique({
-          where: { nombre: parsed.data.nombre },
-        });
-        existsByCodigo = await prisma.area.findUnique({
-          where: { codigo: parsed.data.codigo },
-        });
-      } catch (error) {
-        console.log({ error });
-        throw new Error(JSON.stringify({ toast: "Compruebe su conexión" }));
-      }
-
-      if (existsByNombre) {
-        throw new Error(JSON.stringify({ nombre: "Este campo ya existe" }));
-      }
-
-      if (existsByCodigo) {
-        throw new Error(JSON.stringify({ codigo: "Este campo ya existe" }));
-      }
       const fields = { ...parsed.data, slug: slugify(parsed.data.nombre) };
 
       try {
         return await prisma.area.create({ data: fields });
       } catch (error) {
-        console.log({ error });
-        throw new Error(JSON.stringify({ toast: "Compruebe su conexión" }));
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === "P2002") {
+            // Unique constraint violation
+            const target = error.meta?.target as string[];
+
+            if (target?.includes("codigo")) {
+              throw new Error(
+                JSON.stringify({
+                  codigo: "Este campo ya existe en la base de datos",
+                }),
+              );
+            }
+            if (target?.includes("nombre")) {
+              throw new Error(
+                JSON.stringify({
+                  nombre: "Este campo ya existe en la base de datos",
+                }),
+              );
+            }
+            if (target?.includes("slug")) {
+              throw new Error(
+                JSON.stringify({
+                  nombre: "Este campo ya existe en la base de datos",
+                }),
+              );
+            }
+          }
+          if (error.code === "P2025") {
+            throw new Error(
+              JSON.stringify({
+                toast: `Actualice, el objeto no existe en la Base de Datos`,
+              }),
+            );
+          }
+          throw new Error(
+            JSON.stringify({
+              toast: `Error de base de datos: ${error.code}, por favor enviar al administrador`,
+            }),
+          );
+        }
+        throw new Error(
+          JSON.stringify({
+            toast: "Compruebe su conexión",
+          }),
+        );
       }
     } else {
       const fieldErrors = { ...parsed.error.formErrors.fieldErrors };
@@ -62,23 +83,6 @@ export class ServiceArea {
     const parsed = areaSchema.safeParse(data);
 
     if (parsed.success) {
-      let existeSlug;
-
-      try {
-        existeSlug = await prisma.area.findUnique({
-          where: { slug: slug },
-        });
-      } catch (error) {
-        console.log({ error });
-        throw new Error(JSON.stringify({ toast: "Compruebe su conexión" }));
-      }
-      if (!existeSlug) {
-        throw new Error(
-          JSON.stringify({
-            toast: "Este Elemento no existe en el sistema",
-          }),
-        );
-      }
       const fields = { ...parsed.data, slug: slugify(parsed.data.nombre) };
 
       try {
@@ -87,8 +91,51 @@ export class ServiceArea {
           data: fields,
         });
       } catch (error) {
-        console.log({ error });
-        throw new Error(JSON.stringify({ toast: "Compruebe su conexión" }));
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === "P2002") {
+            // Unique constraint violation
+            const target = error.meta?.target as string[];
+
+            if (target?.includes("codigo")) {
+              throw new Error(
+                JSON.stringify({
+                  codigo: "Este campo ya existe en la base de datos",
+                }),
+              );
+            }
+            if (target?.includes("nombre")) {
+              throw new Error(
+                JSON.stringify({
+                  nombre: "Este campo ya existe en la base de datos",
+                }),
+              );
+            }
+            if (target?.includes("slug")) {
+              throw new Error(
+                JSON.stringify({
+                  nombre: "Este campo ya existe en la base de datos",
+                }),
+              );
+            }
+          }
+          if (error.code === "P2025") {
+            throw new Error(
+              JSON.stringify({
+                toast: `Actualice, el objeto no existe en la Base de Datos`,
+              }),
+            );
+          }
+          throw new Error(
+            JSON.stringify({
+              toast: `Error de base de datos: ${error.code}, por favor enviar al administrador`,
+            }),
+          );
+        }
+        throw new Error(
+          JSON.stringify({
+            toast: "Compruebe su conexión",
+          }),
+        );
       }
     } else {
       const fieldErrors = { ...parsed.error.formErrors.fieldErrors };
