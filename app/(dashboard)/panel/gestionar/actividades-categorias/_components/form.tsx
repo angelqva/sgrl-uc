@@ -1,44 +1,40 @@
 "use client";
 
-import {
-  ChangeEvent,
-  useActionState,
-  useEffect,
-  useState,
-  useTransition,
-} from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 import {
   Button,
   Input,
   Form,
   Card,
   CardBody,
-  Select,
-  SelectItem,
   Textarea,
   addToast,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { ZodObject } from "zod";
-import { Area } from "@prisma/client";
+import { ActividadCategoria } from "@prisma/client";
 
-import { saveArea } from "../_actions/action";
+import { saveCategoria } from "../_actions/action";
 
 import {
-  areaCodigoSchema,
-  areaDescripcionSchema,
-  areaNombreSchema,
-  areaUbicacionSchema,
-} from "@/schema/area";
+  actividadCategoriaDescripcionSchema,
+  actividadCategoriaIconoSchema,
+  actividadCategoriaNombreSchema,
+} from "@/schema/actividad-categoria";
 
-export default function FormArea({ area }: { area?: Area }) {
+export default function FormActividadCategoria({
+  categoria,
+}: {
+  categoria?: ActividadCategoria;
+}) {
   const [pending, startTransaction] = useTransition();
-  const [state, formAction] = useActionState(saveArea, { slug: area?.slug });
-  const [codigo, setCodigo] = useState(area?.codigo ?? "");
-  const [nombre, setNombre] = useState(area?.nombre ?? "");
-  const [ubicacion, setUbicacion] = useState(area?.ubicacion ?? "");
-  const [descripcion, setDescripcion] = useState(area?.descripcion ?? "");
+  const [state, formAction] = useActionState(saveCategoria, {
+    slug: categoria?.slug,
+  });
+  const [nombre, setNombre] = useState(categoria?.nombre ?? "");
+  const [icono, setIcono] = useState(categoria?.icono ?? "");
+  const [descripcion, setDescripcion] = useState(categoria?.descripcion ?? "");
   const [errors, setErrors] = useState<Record<string, string | string[]>>({});
   const router = useRouter();
   const validateField = ({
@@ -83,19 +79,19 @@ export default function FormArea({ area }: { area?: Area }) {
 
     return "";
   };
-  const handleUbicacionChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setUbicacion(event.target.value);
+  const handleIconoChange = (value: string) => {
+    setIcono(value);
     validateField({
-      key: "ubicacion",
-      schema: areaUbicacionSchema,
-      data: { ubicacion: event.target.value },
+      key: "icono",
+      schema: actividadCategoriaIconoSchema,
+      data: { icono: value },
     });
   };
   const handleDescriptionChange = (value: string) => {
     setDescripcion(value);
     validateField({
       key: "descripcion",
-      schema: areaDescripcionSchema,
+      schema: actividadCategoriaDescripcionSchema,
       data: { descripcion: value },
     });
   };
@@ -103,38 +99,26 @@ export default function FormArea({ area }: { area?: Area }) {
     setNombre(value);
     validateField({
       key: "nombre",
-      schema: areaNombreSchema,
+      schema: actividadCategoriaNombreSchema,
       data: { nombre: value },
     });
   };
-  const handleCodigoChange = (value: string) => {
-    setCodigo(value);
-    validateField({
-      key: "codigo",
-      schema: areaCodigoSchema,
-      data: { codigo: value },
-    });
-  };
+
   const handleActionFormData = () => {
     const formData = new FormData();
 
-    console.log({ codigo, nombre, ubicacion, descripcion });
-    Object.entries({ codigo, nombre, ubicacion, descripcion }).forEach(
-      ([key, value]) => {
-        formData.append(key, value);
-      },
-    );
+    Object.entries({ nombre, icono, descripcion }).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
 
     return startTransaction(() => formAction(formData));
   };
 
   useEffect(() => {
-    console.log(state);
     if (state.type) {
       if (state.fields) {
-        setCodigo(state.fields["codigo"]);
         setNombre(state.fields["nombre"]);
-        setUbicacion(state.fields["ubicacion"]);
+        setIcono(state.fields["icono"]);
         setDescripcion(state.fields["descripcion"]);
       }
       if (state.errors) {
@@ -154,14 +138,16 @@ export default function FormArea({ area }: { area?: Area }) {
             description: "Actualizado Satisfactoriamente",
             color: "success",
           });
-          router.push(`/panel/gestionar/areas/${state.area?.slug}`);
+          router.push(
+            `/panel/gestionar/actividades-categorias/${state.categoria?.slug}`,
+          );
         } else {
           addToast({
             title: "Notificación de Éxito",
             description: "Creado Satisfactoriamente",
             color: "success",
           });
-          router.push(`/panel/gestionar/areas`);
+          router.push(`/panel/gestionar/actividades-categorias`);
         }
       }
     }
@@ -177,7 +163,7 @@ export default function FormArea({ area }: { area?: Area }) {
               icon="solar:streets-map-point-bold-duotone"
             />
             <p className="text-2xl font-medium text-secondary-800">
-              Área Formulario
+              Categoria Formulario
             </p>
             <p>Complete los siguientes campos</p>
           </div>
@@ -190,15 +176,15 @@ export default function FormArea({ area }: { area?: Area }) {
             <Input
               isRequired
               autoComplete="off"
-              errorMessage={() => displayErrors("codigo")}
-              isInvalid={typeof errors["codigo"] !== "undefined"}
-              label="Código"
-              name="codigo"
+              errorMessage={() => displayErrors("icono")}
+              isInvalid={typeof errors["icono"] !== "undefined"}
+              label="Icono"
+              name="icono"
               placeholder="Complete este campo"
               type="text"
-              value={codigo}
+              value={icono}
               variant="bordered"
-              onValueChange={handleCodigoChange}
+              onValueChange={handleIconoChange}
             />
             <Input
               isRequired
@@ -213,25 +199,6 @@ export default function FormArea({ area }: { area?: Area }) {
               variant="bordered"
               onValueChange={handleNombreChange}
             />
-            <Select
-              isRequired
-              autoComplete="off"
-              errorMessage={() => displayErrors("ubicacion")}
-              isInvalid={typeof errors["ubicacion"] !== "undefined"}
-              label="Ubicación"
-              placeholder="Seleccione una ubicación"
-              selectedKeys={[ubicacion]}
-              variant="bordered"
-              onChange={handleUbicacionChange}
-            >
-              <SelectItem key="Sede Ignacio Agramonte">
-                Sede Ignacio Agramonte
-              </SelectItem>
-              <SelectItem key="Sede José Martí">Sede José Martí</SelectItem>
-              <SelectItem key="Sede Manuel Fajardo">
-                Sede Manuel Fajardo
-              </SelectItem>
-            </Select>
             <Textarea
               autoComplete="off"
               errorMessage={() => displayErrors("descripcion")}

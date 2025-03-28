@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import { cookies } from "next/headers";
 
-import ListArea from "./_components/list-area";
+import ListArea from "./_components/list";
 
 import BtnLink from "@/components/btn-link";
 import Headings from "@/components/headings";

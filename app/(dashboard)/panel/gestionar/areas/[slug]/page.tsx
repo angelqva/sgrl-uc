@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import ModalDeleteArea from "../_components/delete-area";
+import ModalDeleteArea from "../_components/delete";
 
 import { ServiceArea } from "@/services/service.area";
 import Headings from "@/components/headings";

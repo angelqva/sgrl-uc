@@ -3,7 +3,7 @@
 import { addToast } from "@heroui/react";
 import { useEffect, useRef } from "react";
 
-import { deleteCookie } from "@/app/(dashboard)/panel/gestionar/areas/_action/action.area";
+import { deleteCookie } from "@/app/(dashboard)/panel/gestionar/areas/_actions/action";
 
 export default function FeedBack({ feedback }: { feedback: string }) {
   const hasRun = useRef(false);

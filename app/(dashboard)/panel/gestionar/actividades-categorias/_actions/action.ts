@@ -1,18 +1,18 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { Area } from "@prisma/client";
+import { ActividadCategoria } from "@prisma/client";
 import { cookies } from "next/headers";
 
 import { handleErrors } from "@/lib/utils";
-import { ServiceArea } from "@/services/service.area";
+import { ServiceActividadCategoria } from "@/services/service.actividad-categoria";
 
-export async function saveArea(
+export async function saveCategoria(
   prevState: {
     slug?: string;
     fields?: Record<string, string>;
     errors?: Record<string, string | string[]>;
     type?: "success" | "error";
-    area?: Area;
+    categoria?: ActividadCategoria;
   },
   formData: FormData,
 ) {
@@ -25,26 +25,31 @@ export async function saveArea(
 
   if (newState.slug) {
     try {
-      const area = await ServiceArea.update(newState.slug, formData);
+      const categoria = await ServiceActividadCategoria.update(
+        newState.slug,
+        formData,
+      );
 
       newState.type = "success";
       newState.errors = {} as Record<string, string | string[]>;
 
-      if (area.slug !== newState.slug) {
-        revalidatePath(`/panel/gestionar/areas`);
+      if (categoria.slug !== newState.slug) {
+        revalidatePath(`/panel/gestionar/actividades-categorias`);
         const cookieStore = await cookies();
 
         cookieStore.set(
           "feedback",
           JSON.stringify({
             type: "success",
-            message: `Área: ${area.nombre} actualizada.`,
+            message: `Actividad Categoria: ${categoria.nombre} actualizada.`,
           }),
         );
       } else {
-        revalidatePath(`/panel/gestionar/areas/${area.slug}`);
+        revalidatePath(
+          `/panel/gestionar/actividades-categorias/${categoria.slug}`,
+        );
       }
-      newState.area = area;
+      newState.categoria = categoria;
     } catch (error) {
       newState.type = "error";
       console.log({ error });
@@ -52,12 +57,11 @@ export async function saveArea(
     }
   } else {
     try {
-      const area = await ServiceArea.create(formData);
+      await ServiceActividadCategoria.create(formData);
 
-      console.log(area);
       newState.type = "success";
       newState.errors = {} as Record<string, string | string[]>;
-      revalidatePath(`/panel/gestionar/areas`);
+      revalidatePath(`/panel/gestionar/actividades-categorias`);
     } catch (error) {
       newState.type = "error";
       newState.errors = handleErrors(error);
@@ -66,7 +70,7 @@ export async function saveArea(
 
   return newState;
 }
-export async function deleteArea(
+export async function deleteCategoria(
   prevState: { toast?: string },
   formData: FormData,
 ) {
@@ -76,14 +80,14 @@ export async function deleteArea(
     const slug = formData.get("slug")?.toString() ?? null;
 
     if (!slug) return { toast: "Provea un slug para eliminar" };
-    const area = await ServiceArea.delete(slug);
+    const area = await ServiceActividadCategoria.delete(slug);
     const cookieStore = await cookies();
 
     cookieStore.set(
       "feedback",
       JSON.stringify({
         type: "success",
-        message: `Área: ${area.nombre} eliminada.`,
+        message: `Actividad Categoria: ${area.nombre} eliminada.`,
       }),
     );
     newState.toast = undefined;

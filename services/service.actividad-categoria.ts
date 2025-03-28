@@ -1,24 +1,24 @@
-import { Area, Prisma } from "@prisma/client";
+import { ActividadCategoria, Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/utils";
-import { areaSchema } from "@/schema/area";
+import { actividadCategoriaSchema } from "@/schema/actividad-categoria";
 
-export class ServiceArea {
-  static model = prisma.area;
-  static async list(): Promise<Area[]> {
+export class ServiceActividadCategoria {
+  static model = prisma.actividadCategoria;
+  static async list(): Promise<ActividadCategoria[]> {
     return await this.model.findMany({
       orderBy: { updatedAt: "desc" },
     });
   }
 
-  static async retrieve(slug: string): Promise<Area | null> {
+  static async retrieve(slug: string): Promise<ActividadCategoria | null> {
     return await this.model.findUnique({ where: { slug } });
   }
 
   static async create(formData: FormData) {
     const data = Object.fromEntries(formData.entries());
-    const parsed = areaSchema.safeParse(data);
+    const parsed = actividadCategoriaSchema.safeParse(data);
 
     if (parsed.success) {
       const fields = { ...parsed.data, slug: slugify(parsed.data.nombre) };
@@ -31,13 +31,6 @@ export class ServiceArea {
             // Unique constraint violation
             const target = error.meta?.target as string[];
 
-            if (target?.includes("codigo")) {
-              throw new Error(
-                JSON.stringify({
-                  codigo: "Este campo ya existe en la base de datos",
-                }),
-              );
-            }
             if (target?.includes("nombre")) {
               throw new Error(
                 JSON.stringify({
@@ -81,7 +74,7 @@ export class ServiceArea {
 
   static async update(slug: string, formData: FormData) {
     const data = Object.fromEntries(formData.entries());
-    const parsed = areaSchema.safeParse(data);
+    const parsed = actividadCategoriaSchema.safeParse(data);
 
     if (parsed.success) {
       const fields = { ...parsed.data, slug: slugify(parsed.data.nombre) };
@@ -97,13 +90,6 @@ export class ServiceArea {
             // Unique constraint violation
             const target = error.meta?.target as string[];
 
-            if (target?.includes("codigo")) {
-              throw new Error(
-                JSON.stringify({
-                  codigo: "Este campo ya existe en la base de datos",
-                }),
-              );
-            }
             if (target?.includes("nombre")) {
               throw new Error(
                 JSON.stringify({
@@ -145,7 +131,7 @@ export class ServiceArea {
     }
   }
 
-  static async delete(slug: string): Promise<Area> {
+  static async delete(slug: string) {
     return await this.model.delete({ where: { slug } });
   }
 }

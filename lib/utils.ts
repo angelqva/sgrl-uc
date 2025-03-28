@@ -15,6 +15,7 @@ export function slugify(text: string): string {
     .replace(/-+/g, "-") // múltiples guiones a uno solo
     .replace(/^-+|-+$/g, ""); // elimina guiones al principio y al final
 }
+
 export const handleErrors = (error: any) => {
   if (error instanceof Error) {
     try {

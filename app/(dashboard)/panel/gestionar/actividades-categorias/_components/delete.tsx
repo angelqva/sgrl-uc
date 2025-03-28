@@ -11,18 +11,22 @@ import {
 } from "@heroui/react";
 import { useActionState, useEffect, useTransition } from "react";
 import { Icon } from "@iconify/react";
-import { Area } from "@prisma/client";
+import { ActividadCategoria } from "@prisma/client";
 
-import { deleteArea } from "../_action/action.area";
+import { deleteCategoria } from "../_actions/action";
 
-export default function ModalDeleteArea({ area }: { area: Area }) {
+export default function ModalDeleteActividadCategoria({
+  categoria,
+}: {
+  categoria: ActividadCategoria;
+}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [pending, startTransaction] = useTransition();
-  const [state, formAction] = useActionState(deleteArea, {});
+  const [state, formAction] = useActionState(deleteCategoria, {});
   const handleConfirmar = () => {
     const formData = new FormData();
 
-    formData.append("slug", area.slug);
+    formData.append("slug", categoria.slug);
 
     return startTransaction(() => formAction(formData));
   };
@@ -62,17 +66,17 @@ export default function ModalDeleteArea({ area }: { area: Area }) {
             <>
               <ModalHeader>
                 <h3 className="text-2xl font-medium text-danger-700">
-                  Eliminar Área
+                  Eliminar {categoria.nombre}
                 </h3>
               </ModalHeader>
               <ModalBody>
                 <p className="text-lg">
-                  Presione Confirmar para eliminar el área: {area.nombre}
+                  Está seguro que desea eliminar este contenido
                 </p>
               </ModalBody>
               <ModalFooter>
                 <Button color="default" variant="ghost" onPress={onClose}>
-                  Cancelar
+                  No, Cancelar
                 </Button>
                 <Button
                   color="danger"
@@ -81,7 +85,7 @@ export default function ModalDeleteArea({ area }: { area: Area }) {
                     onClose();
                   }}
                 >
-                  Confirmar
+                  Si, Eliminar
                 </Button>
               </ModalFooter>
             </>
