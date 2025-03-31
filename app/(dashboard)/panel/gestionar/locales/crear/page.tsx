@@ -1,17 +1,20 @@
 import { Icon } from "@iconify/react";
 
-import FormActividadCategoria from "../_components/form";
+import FormLocales from "../_components/form";
 
 import BtnLink from "@/components/btn-link";
 import Headings from "@/components/headings";
+import { ServiceArea } from "@/services/service.area";
 
-export default function Page() {
+export default async function Page() {
+  const areas = await ServiceArea.list();
+
   return (
     <>
       <Headings
         action={
           <BtnLink
-            href="/panel/gestionar/actividades-categorias"
+            href="/panel/gestionar/locales"
             icon={
               <Icon
                 className="w-12 h-12 text-white"
@@ -19,21 +22,21 @@ export default function Page() {
               />
             }
           >
-            Actividades Categorias
+            Locales
           </BtnLink>
         }
       >
         <h1 className="text-3xl font-bold mb-2 text-secondary-800">
-          Crear Categoria de Actividades
+          Crear Local
         </h1>
         <p className="text-lg">
-          Completa el formulario para registrar una nueva categria en el
-          sistema. Asegúrate de ingresar todos los datos requeridos
-          correctamente antes de guardar.
+          Completa el formulario para registrar un nuevo local en el sistema.
+          Asegúrate de ingresar todos los datos requeridos correctamente antes
+          de guardar.
         </p>
       </Headings>
       <section className="mt-10">
-        <FormActividadCategoria />
+        <FormLocales areas={areas} />
       </section>
     </>
   );

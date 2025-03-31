@@ -8,7 +8,7 @@ import Headings from "@/components/headings";
 import FeedBack from "@/components/feedback";
 import { ServiceActividadCategoria } from "@/services/service.actividad-categoria";
 
-export default async function PageGestionarActividadesCategorias() {
+export default async function Page() {
   const categorias = await ServiceActividadCategoria.list();
   const cookieStore = await cookies();
   const feedback = cookieStore.get("feedback");

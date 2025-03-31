@@ -28,3 +28,15 @@ export const optionalStringMinLengthSchema = z
     },
   )
   .optional();
+
+export const arrayEmailsSchema = z
+  .array(z.string().trim())
+  .transform((arr) => arr.filter((email) => email.length > 0)) // elimina vacíos
+  .refine((emails) => emails.length > 0, {
+    message: "Debe agregar al menos un correo válido",
+  })
+  .refine(
+    (emails) =>
+      emails.every((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)),
+    { message: "Todos los correos deben tener formato válido" },
+  );

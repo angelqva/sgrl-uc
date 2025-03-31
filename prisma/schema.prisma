@@ -59,6 +59,8 @@ model Area {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now()) @updatedAt
+
+    Local Local[]
 }
 
 model ActividadCategoria {
@@ -69,4 +71,18 @@ model ActividadCategoria {
     descripcion String   @db.Text
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now()) @updatedAt
+}
+
+model Local {
+    id           String @id @default(uuid())
+    codigo       String @unique
+    nombre       String
+    descripcion  String @db.Text
+    responsables String @db.Text
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
+
+    areaId String
+    area   Area   @relation(fields: [areaId], references: [id], onDelete: Cascade)
 }

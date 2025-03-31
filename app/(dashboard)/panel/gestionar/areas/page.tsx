@@ -8,7 +8,7 @@ import Headings from "@/components/headings";
 import { ServiceArea } from "@/services/service.area";
 import FeedBack from "@/components/feedback";
 
-export default async function PageGestionarAreas() {
+export default async function Page() {
   const areas = await ServiceArea.list();
   const cookieStore = await cookies();
   const feedback = cookieStore.get("feedback");

@@ -1,28 +1,30 @@
 import { redirect } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import FormActividadCategoria from "../../_components/form";
+import FormLocal from "../../_components/form";
 
 import Headings from "@/components/headings";
 import BtnLink from "@/components/btn-link";
-import { ServiceActividadCategoria } from "@/services/service.actividad-categoria";
+import { ServiceLocal } from "@/services/service.local";
+import { ServiceArea } from "@/services/service.area";
 
 export default async function Page({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ codigo: string }>;
 }) {
-  const { slug } = await params;
-  const categoria = await ServiceActividadCategoria.retrieve(slug);
+  const { codigo } = await params;
+  const local = await ServiceLocal.retrieve(codigo);
+  const areas = await ServiceArea.list();
 
-  if (!categoria) return redirect("/panel/gestionar/actividades-categorias");
+  if (!local) return redirect("/panel/gestionar/locales");
 
   return (
     <>
       <Headings
         action={
           <BtnLink
-            href={`/panel/gestionar/actividades-categorias/${slug}`}
+            href={`/panel/gestionar/locales/${codigo}`}
             icon={
               <Icon
                 className="w-12 h-12 text-white"
@@ -35,15 +37,15 @@ export default async function Page({
         }
       >
         <h1 className="text-3xl font-bold mb-2 text-secondary-800 flex items-center">
-          <Icon className="w-12 h-12 mr-2" icon={categoria.icono} />
-          {categoria.nombre} Editar
+          <Icon className="w-12 h-12 mr-2" icon="solar:exit-bold-duotone" />
+          {local.nombre} Editar
         </h1>
         <p className="text-lg">
-          Complete el formulario para realizar cambios en la categoria
+          Complete el formulario para realizar cambios en el área
         </p>
       </Headings>
       <section className="mt-10">
-        <FormActividadCategoria categoria={categoria} />
+        <FormLocal areas={areas} local={local} />
       </section>
     </>
   );

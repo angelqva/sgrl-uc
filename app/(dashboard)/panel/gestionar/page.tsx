@@ -4,7 +4,7 @@ import BtnLink from "@/components/btn-link";
 import Headings from "@/components/headings";
 import CardLinks from "@/components/card-links";
 
-export default function PageGestionar() {
+export default function Page() {
   return (
     <>
       <Headings
@@ -40,7 +40,7 @@ export default function PageGestionar() {
           {
             nombre: "Locales",
             href: "/panel/gestionar/locales",
-            icon: "solar:map-bold",
+            icon: "solar:exit-bold-duotone",
           },
           {
             nombre: "Actividades Categorias",

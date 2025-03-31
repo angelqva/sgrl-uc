@@ -5,7 +5,7 @@ import FormArea from "../_components/form";
 import BtnLink from "@/components/btn-link";
 import Headings from "@/components/headings";
 
-export default function PageAreasCrear() {
+export default function Page() {
   return (
     <>
       <Headings

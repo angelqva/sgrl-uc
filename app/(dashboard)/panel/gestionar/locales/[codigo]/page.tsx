@@ -1,28 +1,28 @@
 import { redirect } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import ModalDeleteActividadCategoria from "../_components/delete";
+import ModalDeleteArea from "../_components/delete";
 
 import Headings from "@/components/headings";
 import BtnLink from "@/components/btn-link";
-import { ServiceActividadCategoria } from "@/services/service.actividad-categoria";
+import { ServiceLocal } from "@/services/service.local";
 
 export default async function Page({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ codigo: string }>;
 }) {
-  const { slug } = await params;
-  const categoria = await ServiceActividadCategoria.retrieve(slug);
+  const { codigo } = await params;
+  const local = await ServiceLocal.retrieve(codigo);
 
-  if (!categoria) return redirect("/panel/gestionar/actividades-categorias");
+  if (!local) return redirect("/panel/gestionar/locales");
 
   return (
     <>
       <Headings
         action={
           <BtnLink
-            href="/panel/gestionar/actividades-categorias"
+            href="/panel/gestionar/locales"
             icon={
               <Icon
                 className="w-12 h-12 text-white"
@@ -30,19 +30,37 @@ export default async function Page({
               />
             }
           >
-            Actividades Categorias
+            Locales
           </BtnLink>
         }
       >
         <h1 className="text-3xl font-bold mb-2 text-secondary-800 flex items-center">
-          <Icon className="w-12 h-12 mr-2" icon={categoria.icono} />
-          {categoria.nombre}
+          <Icon className="w-12 h-12 mr-2" icon="solar:exit-bold-duotone" />
+          {local.nombre}
         </h1>
         <p className="text-lg">
-          {categoria.descripcion ??
-            "Complete la descripción para visualizar este contenido"}
+          {local.descripcion ??
+            "Complete la descripción del area para visualizar este contenido"}
         </p>
       </Headings>
+      <section className="space-y-5 text-xl">
+        <p>
+          <Icon
+            className="w-8 h-8 mr-2 -mt-1 inline-flex"
+            icon="solar:hashtag-broken"
+          />
+          <b>Código: </b>
+          {local.codigo}
+        </p>
+        <p>
+          <Icon
+            className="w-8 h-8 mr-2 -mt-1 inline-flex"
+            icon="solar:text-square-2-broken"
+          />
+          <b>Nombre: </b>
+          {local.nombre}
+        </p>
+      </section>
       <section className="mt-14">
         <h2 className="text-2xl font-semibold text-secondary-800 mb-5">
           Acciones Rápidas
@@ -51,7 +69,7 @@ export default async function Page({
           <BtnLink
             className="text-lg w-full max-w-xs py-7 font-semibold"
             color="primary"
-            href={`/panel/gestionar/actividades-categorias/${slug}/editar`}
+            href={`/panel/gestionar/locales/${codigo}/editar`}
             icon={
               <Icon
                 className="w-8 h-8 text-white"
@@ -61,7 +79,7 @@ export default async function Page({
           >
             Editar
           </BtnLink>
-          <ModalDeleteActividadCategoria categoria={categoria} />
+          <ModalDeleteArea local={local} />
         </div>
       </section>
     </>

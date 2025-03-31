@@ -7,7 +7,7 @@ import { ServiceArea } from "@/services/service.area";
 import Headings from "@/components/headings";
 import BtnLink from "@/components/btn-link";
 
-export default async function PageEditarArea({
+export default async function Page({
   params,
 }: {
   params: Promise<{ slug: string }>;
